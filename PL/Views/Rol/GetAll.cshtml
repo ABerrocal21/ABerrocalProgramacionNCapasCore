@@ -1,0 +1,57 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row"> 
+        <div class="col-md-12">
+            <h1>Roles</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Asigna, agrega, modifica o borra los Roles</h5>
+        </div>
+    </div>
+
+    <hr />
+
+    <div style="float:right;">
+        @Html.ActionLink("Agregar", "Form", "Rol", htmlAttributes: new { @class = "btn btn-success" })
+    </div>
+
+    @if (Model != null)
+    {
+        <div class="row">
+            <table class="table table-hover table-dark table-responsive table-striped" id="tableRol">
+                <thead>
+                    <tr class="table-secondary">
+                        <td class="">Id</td>
+                        <td>Asignar Rol</td>
+                        <td>Nombre</td>
+                        <td>Editar</td>
+                        <td>Eliminar</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rol in Model)
+                    {
+                        <tr>
+                            <th class="text-center"@rol.Id></th>
+                            <th class="text-center"><a class="btn btn-warning glyphicon" href="@Url.Action("Asignar", "Rol", new { IdRole = rol.Id, Name= rol.Name})"><i class="bi bi-pencil-square" style="color: black"></i></a></th>
+                            <th class="text-center" @rol.Id>@rol.Name</th>
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon" href="@Url.Action("Form", "Rol", new { IdRole = rol.Id, Name= rol.Name})"><i class="bi bi-pencil-square" style="color: black"></i></a></td>
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Rol",  new { IdRole = rol.Id })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+

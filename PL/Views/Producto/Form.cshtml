@@ -1,0 +1,189 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Producto | @ViewBag.Action</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Ingrese los datos necesarios</h5>
+        </div>
+    </div>
+
+    <hr />
+
+    <form asp-controller="Producto" asp-action="Form" method="post" enctype="multipart/form-data">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="id" class="mb-1"><i class="visually-hidden"></i>Id Producto:</label>
+                <input type="text" id="idProducto" name="idProducto" value="@Model.IdProducto" class="form-control" hidden/>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="nombre" class="mb-1"><i class=""></i>Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="@Model.Nombre" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label for="nombre" class="mb-1"><i class=""></i>Precio Unitario:</label>
+                <input type="text" id="precioUnitario" name="precioUnitario" value="@Model.PrecioUnitario" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label for="nombre" class="mb-1"><i class=""></i>Stock:</label>
+                <input type="text" id="stock" name="stock" value="@Model.Stock" class="form-control" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="proveedor" class="mb-1"><i class=""></i>Proveedor:</label>
+                @if (Model.Proveedor.Proveedores == null)
+                {
+                    @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(string.Empty, "Value", "Text"), "Selecciona un Proveedor", htmlAttributes: new { id = "ddlProveedor", @class = "form-control" })
+
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un Proveedor", htmlAttributes: new { id = "ddlProveedor", @class = "form-control" })
+                }
+                @* <select name="idProveedor" id="idProveedor" class="form-control">
+                    <option value="0">Selecciona un Proveedor</option>
+                    @foreach (ML.Proveedor proveedor in Model.Proveedor.Proveedores)
+                    {
+                        if (proveedor.IdProveedor == Model.Proveedor.IdProveedor)
+                        {
+                            <option value="@proveedor.IdProveedor" selected>@proveedor.Nombre</option>
+                        }
+                        else
+                        {
+                            <option value="@proveedor.IdProveedor">@proveedor.Nombre</option>
+                        }
+                    }
+                </select> *@
+                @* <input type="text" id="proveedor" name="proveedor" value="@Model.Proveedor" class="form-control" /> *@
+            </div>
+            <div class="col-md-4">
+                <label for="area" class="mb-1"><i class=""></i> Area:</label>
+                <select name="idArea" id="ddlArea" class="form-control">
+                    <option value="0">Selecciona un Area</option>
+                    @foreach (ML.Area area in Model.Departamento.Area.Areas)
+                    {
+                        if (area.IdArea == Model.Departamento.Area.IdArea)
+                        {
+                            <option value="@area.IdArea" selected>@area.Nombre</option>
+                        }
+                        else
+                        {
+                            <option value="@area.IdArea">@area.Nombre</option>
+                        }
+                        
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="departamento" class="mb-1"><i class=""></i> Departamento:</label>
+                <select name="idDepartamento" id="ddlDepartamento" class="form-control">
+                    @* <option value="0" selected>Selecciona un Departamento</option> *@
+                    @if (Model.Departamento.Departamentos != null)
+                    {
+                        @foreach (ML.Departamento departamento in Model.Departamento.Departamentos)
+                        {
+                            if (departamento.IdDepartamento == Model.Departamento.IdDepartamento)
+                            {
+                                <option value="@departamento.IdDepartamento" selected>@departamento.Nombre</option>
+                            }
+                            else
+                            {
+                                <option value="@departamento.IdDepartamento">@departamento.Nombre</option>
+                            }
+                            
+                        }
+                    }
+                   
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1"><i class="bi bi-file-earmark-text-fill" style="color:royalblue"></i></span>
+                    <input type="file" class="form-control-file" name="fuImagen" id="fuImagen" onchange="return PreviewImagen(event)" />                 
+                </div>               
+            </div>
+            <div class="col-md-3">
+                @if (Model.Imagen == null)
+                {
+                    <img id="imgProducto" src="~/Images/Default_pfp.svg.png" width="100px" height="100px">
+                }
+                else
+                {
+                    <img id="imgProducto" src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)" width="100px" height="100px">
+                }
+            </div>           
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-5">
+                <label for="descripcion" class="mb-1"><i class=""></i>Descripcion:</label>
+                <input type="text" id="descripcion" name="descripcion" value="@Model.Descripcion" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-success">Guardar</button>
+            </div>          
+        </div>
+
+    </form>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+
+        function PreviewImagen(event) {
+            var output = document.getElementById('imgProducto');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src)
+            }
+        }
+
+
+    $(document).ready(function () {
+        $("#ddlArea").change(function () {
+
+            $("#ddlDepartamento").empty();
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDepartamento")',
+                dataType: 'json',
+                data: { IdArea: $("#ddlArea").val() },
+                success: function (departamentos) {
+                    $("#ddlDepartamento").append('<option value="0">' + 'Seleccione un Departamento' + '</option>');
+                    $.each(departamentos, function (i, departamentos) {
+                        $("#ddlDepartamento").append('<option value="'
+                            + departamentos.idDepartamento + '">'
+                            + departamentos.nombre + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed.' + ex);
+                }
+            });
+        });
+    });
+
+</script>
