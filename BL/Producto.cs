@@ -1,4 +1,6 @@
-﻿using ML;
+﻿using DL;
+using Microsoft.EntityFrameworkCore;
+using ML;
 
 namespace BL
 {
@@ -17,9 +19,7 @@ namespace BL
                     query.Nombre = producto.Nombre;
                     query.PrecioUnitorio = producto.PrecioUnitario;
                     query.Stock = producto.Stock;
-                    producto.Proveedor = new ML.Proveedor();
                     query.IdProveedor = producto.Proveedor.IdProveedor;
-                    producto.Departamento = new ML.Departamento();
                     query.IdDepartamento = producto.Departamento.IdDepartamento;
                     query.Descripcion = producto.Descripcion;
                     query.Imagen = producto.Imagen;
@@ -67,12 +67,18 @@ namespace BL
                         query.Nombre = producto.Nombre;
                         query.PrecioUnitorio = producto.PrecioUnitario;
                         query.Stock = producto.Stock;
-                        producto.Proveedor = new ML.Proveedor();
                         query.IdProveedor = producto.Proveedor.IdProveedor;
-                        producto.Departamento = new ML.Departamento();
                         query.IdDepartamento = producto.Departamento.IdDepartamento;
                         query.Descripcion = producto.Descripcion;
-                        query.Imagen = producto.Imagen;
+                        if (query.Imagen == null && producto.Imagen != null)
+                        {
+                            query.Imagen = producto.Imagen;
+                        }
+                        else
+                        {
+                            query.Imagen = query.Imagen;
+                        }
+                        
 
                         int RowsAffected = context.SaveChanges();
 
@@ -95,7 +101,7 @@ namespace BL
 
             return result;
         }
-        public static ML.Result GetAll()
+        public static ML.Result GetAll(ML.Producto producto)
         {
             ML.Result result = new ML.Result();
 
@@ -103,37 +109,89 @@ namespace BL
             {
                 using(DL.ABerrocalProgramacionNCapasCoreContext context = new DL.ABerrocalProgramacionNCapasCoreContext())
                 {
-                    var query = (from producto in context.Productos
-                                 join proveedorLINQ in context.Proveedors on producto.IdProveedor equals proveedorLINQ.IdProveedor
-                                 join departamentoLINQ in context.Departamentos on producto.IdDepartamento equals departamentoLINQ.IdDepartamento
-                                 join areaLINQ in context.Areas on departamentoLINQ.IdArea equals areaLINQ.IdArea
-                                 select new
-                                 {
-                                     IdProducto = producto.IdProducto,
-                                     Nombre = producto.Nombre,
-                                     Precio = producto.PrecioUnitorio,
-                                     Stock = producto.Stock,
-                                     Proovedor = proveedorLINQ.Nombre,
-                                     Departamento = departamentoLINQ.Nombre,
-                                     Area = areaLINQ.Nombre,
-                                     Descripcion = producto.Descripcion,
-                                     Imagen = producto.Imagen,
-                                 }).ToList();
+                    dynamic x = null;
+                    var query = x;
 
+                    if (producto.Departamento.Area.IdArea > 0 && producto.Departamento.IdDepartamento == 0)
+                    {
+                        query = (from productoLINQ in context.Productos                                     
+                                     join proveedorLINQ in context.Proveedors on productoLINQ.IdProveedor equals proveedorLINQ.IdProveedor
+                                     join departamentoLINQ in context.Departamentos on productoLINQ.IdDepartamento equals departamentoLINQ.IdDepartamento
+                                     join areaLINQ in context.Areas on departamentoLINQ.IdArea equals areaLINQ.IdArea
+                                     where areaLINQ.IdArea == producto.Departamento.Area.IdArea
+                                 select new
+                                     {
+                                         IdProducto = productoLINQ.IdProducto,
+                                         Nombre = productoLINQ.Nombre,
+                                         Precio = productoLINQ.PrecioUnitorio,
+                                         Stock = productoLINQ.Stock,
+                                         Proovedor = proveedorLINQ.Nombre,
+                                         Area = areaLINQ.Nombre,
+                                         Departamento = departamentoLINQ.Nombre,
+                                         Descripcion = productoLINQ.Descripcion,
+                                         Imagen = productoLINQ.Imagen
+                                     }).ToList();
+                    }
+
+                    else if (producto.Departamento.Area.IdArea > 0 && producto.Departamento.IdDepartamento > 0)
+                    {
+                            query = (from productoLINQ in context.Productos
+                                         join proveedorLINQ in context.Proveedors on productoLINQ.IdProveedor equals proveedorLINQ.IdProveedor
+                                         join departamentoLINQ in context.Departamentos on productoLINQ.IdDepartamento equals departamentoLINQ.IdDepartamento
+                                         join areaLINQ in context.Areas on departamentoLINQ.IdArea equals areaLINQ.IdArea
+                                         where areaLINQ.IdArea == producto.Departamento.Area.IdArea && departamentoLINQ.IdDepartamento == producto.Departamento.IdDepartamento
+                                     select new
+                                         {
+                                             IdProducto = productoLINQ.IdProducto,
+                                             Nombre = productoLINQ.Nombre,
+                                             Precio = productoLINQ.PrecioUnitorio,
+                                             Stock = productoLINQ.Stock,
+                                             Proovedor = proveedorLINQ.Nombre,
+                                             Area = areaLINQ.Nombre,
+                                             Departamento = departamentoLINQ.Nombre,
+                                             Descripcion = productoLINQ.Descripcion,
+                                             Imagen = productoLINQ.Imagen
+                                         }).ToList();
+                    }
+
+                    else
+                    {
+                        query = (from productoLINQ in context.Productos
+                                     join proveedorLINQ in context.Proveedors on productoLINQ.IdProveedor equals proveedorLINQ.IdProveedor
+                                     join departamentoLINQ in context.Departamentos on productoLINQ.IdDepartamento equals departamentoLINQ.IdDepartamento
+                                     join areaLINQ in context.Areas on departamentoLINQ.IdArea equals areaLINQ.IdArea
+                                     select new
+                                     {
+                                         IdProducto = productoLINQ.IdProducto,
+                                         Nombre = productoLINQ.Nombre,
+                                         Precio = productoLINQ.PrecioUnitorio,
+                                         Stock = productoLINQ.Stock,
+                                         Proovedor = proveedorLINQ.Nombre,
+                                         Departamento = departamentoLINQ.Nombre,
+                                         Area = areaLINQ.Nombre,
+                                         Descripcion = productoLINQ.Descripcion,
+                                         Imagen = productoLINQ.Imagen,
+                                     }).ToList();
+                        
+                    }                    
+                    
                     if (query.Count > 0 )
                     {
                         result.Objects = new List<object>();
                         foreach ( var item in query)
                         {
-                            ML.Producto producto = new ML.Producto();
+                            producto = new ML.Producto();
+
                             producto.IdProducto = item.IdProducto;
                             producto.Nombre = item.Nombre;
                             producto.PrecioUnitario = item.Precio;
                             producto.Stock = item.Stock;
                             producto.Proveedor = new ML.Proveedor();
-                            producto.Proveedor.Nombre = item.Proovedor;
+                            producto.Proveedor.Nombre = item.Proovedor;                           
                             producto.Departamento = new ML.Departamento();
                             producto.Departamento.Nombre = item.Departamento;
+                            producto.Departamento.Area = new ML.Area();
+                            producto.Departamento.Area.Nombre = item.Area;
                             producto.Descripcion = item.Descripcion;
                             producto.Imagen = item.Imagen;
 
@@ -201,7 +259,7 @@ namespace BL
                     }
 
                         result.Correct = true;
-                    }
+                }
                 
             }
             catch (Exception e)

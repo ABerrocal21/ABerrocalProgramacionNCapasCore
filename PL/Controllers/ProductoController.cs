@@ -4,11 +4,43 @@ namespace PL.Controllers
 {
     public class ProductoController : Controller
     {
+        [HttpGet]
         public IActionResult GetAll()
         {
             ML.Producto producto = new ML.Producto();
-            ML.Result result = BL.Producto.GetAll();
+            producto.Departamento = new ML.Departamento();
+            producto.Departamento.Area = new ML.Area();
+
+            ML.Result result = BL.Producto.GetAll(producto);
+
+            ML.Result resultArea = BL.Area.GetAll();
+            producto.Departamento.Area.Areas = resultArea.Objects;
+
             producto.Productos = new List<object>();
+
+            if (result.Correct)
+            {
+                producto.Productos = result.Objects;
+            }
+            else
+            {
+                ViewBag.Message = result.Message;
+            }
+
+            return View(producto);
+        }
+
+        [HttpPost]
+        public IActionResult GetAll(ML.Producto producto)
+        {
+
+            ML.Result result = BL.Producto.GetAll(producto);
+            producto.Productos = new List<object>();
+
+            ML.Result resultArea = BL.Area.GetAll();
+            producto.Departamento.Area.Areas = resultArea.Objects;
+
+
 
             if (result.Correct)
             {
@@ -75,7 +107,7 @@ namespace PL.Controllers
         [HttpPost]
         public IActionResult Form(ML.Producto producto, IFormFile fuImagen)
         {
-            if (producto.Imagen != null || fuImagen != null)
+            if ((producto.Imagen != null && fuImagen != null)||(producto.Imagen == null && fuImagen !=null))
             {
                     if (fuImagen.Length > 0)
                     {

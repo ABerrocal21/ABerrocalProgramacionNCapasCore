@@ -29,6 +29,7 @@ namespace DL
         public virtual DbSet<Proveedor> Proveedors { get; set; } = null!;
         public virtual DbSet<VentaProducto> VentaProductos { get; set; } = null!;
         public virtual DbSet<Ventum> Venta { get; set; } = null!;
+        public virtual DbSet<VwProductosGetAll> VwProductosGetAlls { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -238,6 +239,35 @@ namespace DL
                     .WithMany(p => p.Venta)
                     .HasForeignKey(d => d.IdMetodoPago)
                     .HasConstraintName("FK__Venta__IdMetodoP__44FF419A");
+            });
+
+            modelBuilder.Entity<VwProductosGetAll>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwProductosGetAll");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreArea)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreDepartamento)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreProducto)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreProveedor)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PrecioUnitorio).HasColumnType("decimal(18, 2)");
             });
 
             OnModelCreatingPartial(modelBuilder);

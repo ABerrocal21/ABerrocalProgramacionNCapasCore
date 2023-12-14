@@ -70,7 +70,15 @@
             </div>
             <div class="col-md-4">
                 <label for="area" class="mb-1"><i class=""></i> Area:</label>
-                <select name="idArea" id="ddlArea" class="form-control">
+                @if (Model.Proveedor.Proveedores == null)
+                {
+                    @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(string.Empty, "Value", "Text"), "Selecciona un Area", htmlAttributes: new { id = "ddlArea", @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Selecciona un Area", htmlAttributes: new { id = "ddlArea", @class = "form-control" })
+                }
+               @*  <select name="idArea" id="ddlArea" class="form-control">
                     <option value="0">Selecciona un Area</option>
                     @foreach (ML.Area area in Model.Departamento.Area.Areas)
                     {
@@ -84,12 +92,20 @@
                         }
                         
                     }
-                </select>
+                </select> *@
             </div>
             <div class="col-md-4">
                 <label for="departamento" class="mb-1"><i class=""></i> Departamento:</label>
-                <select name="idDepartamento" id="ddlDepartamento" class="form-control">
-                    @* <option value="0" selected>Selecciona un Departamento</option> *@
+                @if (Model.Departamento.Departamentos == null)
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(string.Empty, "Value", "Text"), "Selecciona un Departamento", htmlAttributes: new { id = "ddlDepartamento", @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos, "IdDepartamento", "Nombre"), "Selecciona un Departamento", htmlAttributes: new { id = "ddlDepartamento", @class = "form-control" })
+                }
+                @* <select name="idDepartamento" id="ddlDepartamento" class="form-control">
+                     <option value="0" selected>Selecciona un Departamento</option>
                     @if (Model.Departamento.Departamentos != null)
                     {
                         @foreach (ML.Departamento departamento in Model.Departamento.Departamentos)
@@ -104,14 +120,14 @@
                             }
                             
                         }
-                    }
+                    } *@
                    
                 </select>
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-file-earmark-text-fill" style="color:royalblue"></i></span>
                     <input type="file" class="form-control-file" name="fuImagen" id="fuImagen" onchange="return PreviewImagen(event)" />                 
@@ -126,6 +142,7 @@
                 {
                     <img id="imgProducto" src="data:image/png;base64,@Convert.ToBase64String(Model.Imagen)" width="100px" height="100px">
                 }
+                @Html.HiddenFor(model => model.Imagen)
             </div>           
         </div>
 
@@ -136,10 +153,13 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-md-2">
                 <button class="btn btn-success">Guardar</button>
-            </div>          
+            </div>
+            <div class="col-md-3">
+                    @Html.ActionLink(" Regresar", "GetAll", "Producto", new { area = "" }, new { @class = "btn btn-danger bi bi-arrow-left" })
+            </div>
         </div>
 
     </form>
