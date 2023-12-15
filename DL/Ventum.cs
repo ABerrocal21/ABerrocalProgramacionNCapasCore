@@ -7,7 +7,7 @@ namespace DL
     {
         public int IdVenta { get; set; }
         public string? IdCliente { get; set; }
-        public decimal? Total { get; set; }
+        public decimal Total { get; set; }
         public int? IdMetodoPago { get; set; }
         public DateTime Fecha { get; set; }
 

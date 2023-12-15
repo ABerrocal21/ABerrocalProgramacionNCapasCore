@@ -222,7 +222,7 @@ namespace DL
             modelBuilder.Entity<Ventum>(entity =>
             {
                 entity.HasKey(e => e.IdVenta)
-                    .HasName("PK__Venta__BC1240BD7A55EC1A");
+                    .HasName("PK__Venta__BC1240BDE6613D6F");
 
                 entity.Property(e => e.Fecha).HasColumnType("date");
 
@@ -233,12 +233,12 @@ namespace DL
                 entity.HasOne(d => d.IdClienteNavigation)
                     .WithMany(p => p.Venta)
                     .HasForeignKey(d => d.IdCliente)
-                    .HasConstraintName("FK__Venta__IdCliente__440B1D61");
+                    .HasConstraintName("FK__Venta__IdCliente__49C3F6B7");
 
                 entity.HasOne(d => d.IdMetodoPagoNavigation)
                     .WithMany(p => p.Venta)
                     .HasForeignKey(d => d.IdMetodoPago)
-                    .HasConstraintName("FK__Venta__IdMetodoP__44FF419A");
+                    .HasConstraintName("FK__Venta__IdMetodoP__4AB81AF0");
             });
 
             modelBuilder.Entity<VwProductosGetAll>(entity =>
