@@ -17,75 +17,31 @@
             @foreach (ML.Producto producto in Model.Productos)
             {
                 <div class="col-md-4">
-                    <div class="wrapper">
-
-                        <div class="overviewInfo">
-                            <div class="actions">
-                                <div class="backbutton ">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1.02698 11.9929L5.26242 16.2426L6.67902 14.8308L4.85766 13.0033L22.9731 13.0012L22.9728 11.0012L4.85309 11.0033L6.6886 9.17398L5.27677 7.75739L1.02698 11.9929Z" fill="currentColor" />
-                                    </svg>
-                                </div>
-                                <div class="cartbutton neurobutton">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.79166 2H1V4H4.2184L6.9872 16.6776H7V17H20V16.7519L22.1932 7.09095L22.5308 6H6.6552L6.08485 3.38852L5.79166 2ZM19.9869 8H7.092L8.62081 15H18.3978L19.9869 8Z" fill="currentColor" />
-                                        <path d="M10 22C11.1046 22 12 21.1046 12 20C12 18.8954 11.1046 18 10 18C8.89543 18 8 18.8954 8 20C8 21.1046 8.89543 22 10 22Z" fill="currentColor" />
-                                        <path d="M19 20C19 21.1046 18.1046 22 17 22C15.8954 22 15 21.1046 15 20C15 18.8954 15.8954 18 17 18C18.1046 18 19 18.8954 19 20Z" fill="currentColor" />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div class="productinfo">
-                                <div class="grouptext">
-                                    <h3>DEPARTAMENTO</h3>
-                                    <p>@producto.Departamento</p>
-                                </div>
-                                <div class="grouptext">
-                                    <h3>MARCA</h3>
-                                    <p>@producto.Proveedor</p>
-                                </div>
-                                <div class="grouptext">
-                                    <h3>PRECIO</h3>
-                                    <p>$@producto.PrecioUnitario</p>
-                                </div>
-
-                                <div class="productImage">
-                                    @if (producto.Imagen == null)
-                                    {
-                                        <img id="imgProducto" src="~/Images/Default_pfp.svg.png" width="100px" height="100px">
-                                    }
-                                    else
-                                    {
-                                        <img id="imgProducto" src="data:image/png;base64,@Convert.ToBase64String(producto.Imagen)" width="100px" height="100px">
-                                    }
-                                </div>
-
-                            </div>
-
+                    <section class="card">
+                        <div class="product-image">
+                            @if (producto.Imagen == null)
+                            {
+                                <img id="imgProducto" src="~/Images/Default_pfp.svg.png" width="" height="">
+                            }
+                            else
+                            {
+                                <img id="imgProducto" src="data:image/png;base64,@Convert.ToBase64String(producto.Imagen)" width="" height="">
+                            }
                         </div>
-                        <!-- overview info -->
-
-                        <div class="productSpecifications">
-                            <h1>@producto.Nombre</h1>
-                            <p> @producto.Descripcion</p>
-                            <div class="checkoutButton">
-                                <div class="priceTag">
-                                    <span>$</span>@producto.PrecioUnitario
-                                </div>
-                                <button class="preorder">
-                                    <p>Preorder</p>
-                                    <div class="buttonaction">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z" fill="currentColor" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </div>
+                        <div class="product-info">
+                            <h2>@producto.Nombre</h2>
+                            <p>@producto.Descripcion</p>
+                            <div class="price">$@producto.PrecioUnitario</div>
                         </div>
-                        <!-- product specificaiton -->
-
-                    </div>
-                    <!-- wrapper-->
+                        <div class="btn">
+                            <a href="@Url.Action("Carrito", "Venta", new { IdProducto = producto.IdProducto })" class="btn btn-primary buy-btn bi bi-cart-plus-fill"></a>
+@*                             <button class="fav">
+                                <svg class="svg" id="i-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M16 2 L20 12 30 12 22 19 25 30 16 23 7 30 10 19 2 12 12 12 Z" />
+                                </svg>
+                            </button> *@
+                        </div>
+                    </section>
                 </div>
             }
         </div>
@@ -94,228 +50,120 @@
 </div>
 
 <style>
-    @@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
+    /* @@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"); */
 
-    *,
-    button,
-    input {
-        margin: 0px;
-        padding: 0px;
-        box-sizing: border-box;
-        font-family: "Roboto", sans-serif;
-    }
+/*===== VARIABLES CSS =====*/
+:root {
+  --dark-color-lighten: #f2f5ff;
+  --red-card: #a62121;
+  --blue-card: #4bb7e6;
+  --btn: #141414;
+  --btn-hover: #3a3a3a;
+  --text: #fbf7f7;
+}
 
-    :root {
-        --bg-shape-color: linear-gradient(120deg, #343a4f, #0f1620);
-        --lightblue: #3d9dea;
-        --darkblue: #4a4eee;
-        --text-color: #d5e1ef;
-    }
+/*===== RESET =====*/
 
-    .wrapper {
-        width: 350px;
-        border-radius: 40px;
-        background-color: ghostwhite;
-        overflow: hidden;
-    }
+a {
+  font-family: "Montserrat", sans-serif; 
+  border-radius: 0.2rem;
+  color: var(--text);
+  cursor: pointer;
+}
 
-    .overviewInfo,
-    .productSpecifications {
-        padding: 24px;
-    }
 
-    .overviewInfo {
-        background-color: lightslategray;
-    }
-
-    .actions {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 32px;
-        .cartbutton
-
-    {
-        position: relative;
-    }
-
-    .cartbutton::after {
-        content: "";
+img {
+  max-width: 100%;
+  height: 100%;
+  user-select: none;
         display: block;
-        width: 8px;
-        height: 8px;
-        background-image: linear-gradient(90deg, #489be2, #0f629c);
-        border-radius: 50%;
-        position: absolute;
-        top: 11px;
-        right: 8px;
-    }
+        margin-left: auto;
+        margin-right: auto;
+}
 
-    .cartbutton svg {
-        color: #ababab73;
-    }
+/*===== CARD =====*/
 
-    .backbutton,
-    .cartbutton {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-    }
+.card {
+  padding: 1rem;
+  width: 350px;
+  height: 450px;
+  box-shadow: -1px 15px 30px -12px rgb(32, 32, 32);
+  border-radius: 0.9rem;
+  background-color: var(--blue-card);
+  color: var(--text);
+  cursor: pointer;
+}
 
-    }
+.card-blue {
+  background: var(--blue-card);
+}
 
-    .neurobutton {
-        background-image: var(--bg-shape-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: inset 3px 4px 5px 0px rgba(197, 197, 197, 0.1), inset 3px 6px 6px 5px rgba(78, 77, 77, 0.1), -2px -2px 8px 2px rgba(255, 255, 255, 0.1), 2px 2px 6px 3px rgba(0, 0, 0, 0.4);
-    }
+.product-image {
+    align-content:center;
+    align-items:center;
+  height: 257px;
+  width: auto;
+  filter: drop-shadow(5px 10px 15px rgba(8, 9, 13, 0.4));
+}
+.product-info {
+  text-align: center;
+}
 
-    .productinfo {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        position: relative;
-        min-height: 200px;
-        margin-bottom: 50px;
-    }
+.product-info h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+.product-info p {
+  margin: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.price {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.card .btn {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 0.8rem;
+}
+.buy-btn {
+  background-color: var(--btn);
+  padding: 0.6rem 3.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: 300ms ease;
+}
+.buy-btn:hover {
+  background-color: var(--btn-hover);
+}
+.fav {
+  box-sizing: border-box;
+  background: #fff;
+  padding: 0.5rem 0.5rem;
+  border: 1px solid#000;
+  display: grid;
+  place-items: center;
+}
 
-    .productImage {
-        position: absolute;
-        width: 280px;
-        height: auto;
-        transform: translate(120px, -10px);
-        // animation: updowncontroller infinite 3s alternate;
-        img
+.svg {
+  height: 25px;
+  width: 25px;
+  fill: #fff;
+  transition: all 500ms ease;
+}
 
-    {
-        width: 100%;
-        height: auto;
-    }
+.fav:hover .svg {
+  fill: #000;
+}
 
-    }
-
-    h1 {
-        font-family: "Michroma", sans-serif;
-    }
-
-    .grouptext {
-        h3
-
-    {
-        letter-spacing: 3.2px;
-        font-size: 14px;
-        font-weight: 500;
-        margin-bottom: 8px;
-    }
-
-    p {
-        font-size: 12px;
-        opacity: 0.8;
-    }
-
-    }
-
-    /* product specifications */
-    .featureIcon {
-        width: 40px;
-        height: 40px;
-        background-image: var(--bg-shape-color);
-        border-radius: 8px;
-        margin-right: 16px;
-    }
-
-    .productSpecifications {
-        h1
-
-    {
-        margin-top: 10px;
-        margin-bottom: 16px;
-        font-size: 32px;
-    }
-
-    p {
-        opacity: 0.8;
-        font-size: 15px;
-        line-height: 1.5;
-    }
-
-    .productFeatures {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        margin-top: 20px;
-        grid-row-gap: 16px;
-        .feature
-
-    {
-        display: flex;
-    }
-
-    }
-    }
-
-    .checkoutButton {
-        display: flex;
-        width: 100%;
-        background-image: var(--bg-shape-color);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: -2px -2px 2px 0px rgba(80, 80, 80, 0.1), 2px 2px 3px 0px rgba(12, 12, 12, 0.3), inset 0px 0px 0px 2px rgba(80, 80, 80, 0.2);
-        margin-top: 30px;
-        padding: 14px;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .priceTag {
-        color: #488dc7;
-        display: flex;
-        align-items: center;
-        font-size: 32px;
-    }
-
-        .priceTag span {
-            color: #488dc7;
-            font-size: 20px;
-        }
-
-    /* checkout button*/
-    button.preorder {
-        outline: 0;
-        border: 0;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        background-image: linear-gradient(85deg, #61c7ef, #4833fb);
-        color: white;
-    }
-
-    .preorder p {
-        padding: 8px 17px;
-        border-right: 1px solid rgba(0, 0, 0, 0.4);
-    }
-
-    .buttonaction {
-        border-left: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 5px 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    /* animation */
-
-    @@keyframes updowncontroller {
-        0% {
-            transform: rotate(-90deg) translate(-56px, 66px);
-        }
-
-        80%,
-        100% {
-            transform: rotate(-70deg) translate(10px, 66px);
-        }
-    }
-
+@@media screen and (max-width: 800px) {
+  .container {
+    padding: 2rem 0;
+    width: 100%;
+    flex-direction: column;
+    gap: 3rem;
+  }
+}
 </style>

@@ -18,8 +18,8 @@ namespace BL
                 using(DL.ABerrocalProgramacionNCapasCoreContext context = new DL.ABerrocalProgramacionNCapasCoreContext())
                 {
                     DL.Ventum query = new DL.Ventum();
-
-                    query.IdVenta = venta.IdVenta;
+                    
+                    query.Total = venta.Total;
                     query.IdCliente = venta.Usuario.IdUsuario;
                     query.IdMetodoPago = venta.MetodoPago.IdMetodoPago;
 
@@ -37,6 +37,7 @@ namespace BL
                     if (rowsAffected > 0)
                     {
                         result.Correct = true;
+                        result.Object = venta;
 
                     }
                     else

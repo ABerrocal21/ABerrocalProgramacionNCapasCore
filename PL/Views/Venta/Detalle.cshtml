@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewData["Title"] = "Detalle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <div class="row">
+        <h1>Detalle</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Detalle de su compra</h5>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div style="float:right">
+                @Html.ActionLink("Volver a comprar", "ProductoGetAll","Venta", htmlAttributes: new {@class = "btn btn-success"})
+            </div>
+        </div>
+        <
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-dark table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <td class="visually-hidden">IdProducto</td>
+                        <td class="text-center">Nombre</td>
+                        <td class="text-center">Precio Unitario</td>
+                        <td class="text-center">Descripcion</td>
+                        <td class="text-center">Imagen</td>
+                        <td class="text-center">Cantidad</td>
+                        <td class="text-center">Subtotal</td>
+                        <td class="text-center">Total</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.VentaProducto ventaProducto in Model.VentaProductos)
+                    {
+                        <tr>
+                            <td class="visually-hidden">@ventaProducto.Producto.IdProducto</td>
+                            <td>@ventaProducto.Producto.Nombre</td>
+                            <td class="text-center">@ventaProducto.Producto.PrecioUnitario</td>
+                            <td>@ventaProducto.Producto.Descripcion</td>
+                            @if (ventaProducto.Producto.Imagen != null)
+                            {
+                                <td class="text-center"><img src="data:image/jpeg;base64,@Convert.ToBase64String(ventaProducto.Producto.Imagen)" style=" height:150px; width: 150px;" /></td>
+                            }
+                            else
+                            {
+                                <td class="text-center"><img src="~/Content/SIN-IMAGEN.jpg" style=" height:150px; width:150px;" /></td>
+                            }
+                            <td> <a style="margin-left:15px; margin-right:15px;"> @ventaProducto.Cantidad</a> </td>
+                            <td class="text-center">$ @(ventaProducto.Producto.PrecioUnitario * ventaProducto.Cantidad)</td>
+                            <td class="text-center">@Model.Venta.Total</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

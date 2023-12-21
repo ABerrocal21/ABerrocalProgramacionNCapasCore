@@ -217,6 +217,11 @@ namespace DL
                     .WithMany(p => p.VentaProductos)
                     .HasForeignKey(d => d.IdProducto)
                     .HasConstraintName("FK__VentaProd__IdPro__3E52440B");
+
+                entity.HasOne(d => d.IdVentaNavigation)
+                    .WithMany(p => p.VentaProductos)
+                    .HasForeignKey(d => d.IdVenta)
+                    .HasConstraintName("FK__VentaProd__IdVen__4BAC3F29");
             });
 
             modelBuilder.Entity<Ventum>(entity =>

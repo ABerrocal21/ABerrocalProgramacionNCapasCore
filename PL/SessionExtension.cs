@@ -9,10 +9,10 @@ namespace PL
             session.SetString(key, JsonSerializer.Serialize(list));
         }
 
-        public static List<object>? Get<List>(this ISession session, string key)
+        public static List<ML.VentaProducto>? Get<List>(this ISession session, string key)
         {
-            var value = session.GetString(key);
-            return value == null ? default : JsonSerializer.Deserialize<List<object>>(value);
+            var value = session.Get(key);
+            return value == null ? default : JsonSerializer.Deserialize<List<ML.VentaProducto>>(value);
         }
 
     }

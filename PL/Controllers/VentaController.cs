@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BL;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ML;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 
@@ -40,6 +42,7 @@ namespace PL.Controllers
         {
             ML.Result result = new ML.Result();
             result.Objects = new List<object>();
+            var session = HttpContext.Session.Get<List<object>>(SessionCarrito);
 
             if (idProducto != null)
             {
@@ -62,11 +65,13 @@ namespace PL.Controllers
 
                     HttpContext.Session.Set<List<object>>(SessionCarrito, result.Objects);
 
+                    session = HttpContext.Session.Get<List<object>>(SessionCarrito);
+
                 }
                 else
                 {
-                    result.Objects = (List<object>)HttpContext.Session.Get<List<object>>(SessionCarrito);
-
+                    result.Objects = HttpContext.Session.Get<ML.VentaProducto>(SessionCarrito).ToList<object>();
+                                                  
                     bool Existe = false;
                     var indice = 0;
 
@@ -108,14 +113,21 @@ namespace PL.Controllers
                 }
 
             }
-
+            else
+            {
+                if (HttpContext.Session.Get<List<object>>(SessionCarrito) != null)
+                {
+                    result.Objects = HttpContext.Session.Get<ML.VentaProducto>(SessionCarrito).ToList<object>();
+                }
+               
+            }
             return View(result);
         }
 
-        public IActionResult Suma(int idProducto)
+        public IActionResult Sumar(int idProducto)
         {
             ML.Result result = new ML.Result();
-            result.Objects = (List<object>)HttpContext.Session.Get<List<object>>(SessionCarrito);
+            result.Objects = HttpContext.Session.Get<ML.VentaProducto>(SessionCarrito).ToList<object>();
 
             foreach (ML.VentaProducto ventaProducto in result.Objects)
             {
@@ -126,6 +138,8 @@ namespace PL.Controllers
                 
             }
 
+            HttpContext.Session.Set<List<object>>(SessionCarrito, result.Objects);
+
             return View("Carrito", result);
 
         }
@@ -134,7 +148,7 @@ namespace PL.Controllers
         {
             ML.Result result = new ML.Result();
 
-            result.Objects = (List<Object>)HttpContext.Session.Get<List<object>>(SessionCarrito);
+            result.Objects = HttpContext.Session.Get<ML.VentaProducto>(SessionCarrito).ToList<object>();
 
             foreach (ML.VentaProducto ventaProducto in result.Objects)
             {
@@ -144,13 +158,15 @@ namespace PL.Controllers
                     ventaProducto.Cantidad -= 1;
                 }
             }
+            HttpContext.Session.Set<List<object>>(SessionCarrito, result.Objects);
+
             return View("Carrito", result);
         }
 
         public IActionResult Eliminar(int IdProducto)
         {
             ML.Result result = new ML.Result();
-            result.Objects = (List<Object>)HttpContext.Session.Get<List<object>>(SessionCarrito);
+            result.Objects = HttpContext.Session.Get<ML.VentaProducto>(SessionCarrito).ToList<object>();
             var indice = 0; 
 
             foreach (ML.VentaProducto ventaProducto in result.Objects)
@@ -181,7 +197,7 @@ namespace PL.Controllers
         public ActionResult Procesar()
         {
             ML.Result result = new ML.Result();
-            result.Objects = (List<object>)HttpContext.Session.Get<List<object>>(SessionCarrito);
+            result.Objects = HttpContext.Session.Get<ML.VentaProducto>(SessionCarrito).ToList<object>();
 
             ML.Venta venta = new ML.Venta();
 
@@ -193,11 +209,18 @@ namespace PL.Controllers
 
             venta.Total = GetTotal(result.Objects);
 
-            result = BL.Venta.Add(venta, result.Objects);
+            ML.Result result2 = BL.Venta.Add(venta, result.Objects);
 
-            venta.IdVenta = ((ML.Venta)result.Object).IdVenta;
+            venta.IdVenta = ((ML.Venta)result2.Object).IdVenta;
+            venta.Ventas = new List<object>();
+            ML.Producto producto = new ML.Producto();
 
-            return RedirectToAction("GetById", "VentaProducto", new { IdVenta = venta.IdVenta });
+            foreach (ML.VentaProducto item in result.Objects)
+            {
+                venta.Ventas.Add(item);
+            }
+
+            return RedirectToAction("GetById");
 
         }
 
@@ -205,6 +228,29 @@ namespace PL.Controllers
         {
             ViewBag.Message = "¿Deseas finalizar tu compra?";
             return PartialView("Modal");
+        }
+
+
+        public IActionResult GetById(List<object> Venta)
+        {
+            //ML.Result result = BL.VentaProducto.GetbyIdVenta(Venta.IdVenta);
+            ML.Result result = new ML.Result();
+            result.Objects = HttpContext.Session.Get<ML.VentaProducto>(SessionCarrito).ToList<object>();
+            ML.VentaProducto ventaProducto = new ML.VentaProducto();
+
+            //if (result.Correct)
+            //{
+            //    ventaProducto.VentaProductos = result.Objects;
+            //}
+            //else
+            //{
+            //    ViewBag.Message = result.Message;
+            //}
+            ventaProducto.VentaProductos = result.Objects;
+            ventaProducto.Venta = new ML.Venta();
+            ventaProducto.Venta.Total = GetTotal(result.Objects);
+
+            return View("Detalle", ventaProducto);
         }
     }
 }

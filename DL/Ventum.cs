@@ -5,6 +5,11 @@ namespace DL
 {
     public partial class Ventum
     {
+        public Ventum()
+        {
+            VentaProductos = new HashSet<VentaProducto>();
+        }
+
         public int IdVenta { get; set; }
         public string? IdCliente { get; set; }
         public decimal Total { get; set; }
@@ -13,5 +18,6 @@ namespace DL
 
         public virtual AspNetUser? IdClienteNavigation { get; set; }
         public virtual MetodoPago? IdMetodoPagoNavigation { get; set; }
+        public virtual ICollection<VentaProducto> VentaProductos { get; set; }
     }
 }
