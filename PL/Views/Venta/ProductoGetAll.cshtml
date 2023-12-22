@@ -5,11 +5,13 @@
 }
 
 <div class="container">
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-12">
             <h1>Productos</h1>
         </div>
     </div>
+
+    <hr />
 
     @if (Model.Productos.Count > 0 && Model.Productos != null)
     {
@@ -17,7 +19,7 @@
             @foreach (ML.Producto producto in Model.Productos)
             {
                 <div class="col-md-4">
-                    <section class="card">
+                    <section class="card bg-primary">
                         <div class="product-image">
                             @if (producto.Imagen == null)
                             {
@@ -84,6 +86,7 @@ img {
 /*===== CARD =====*/
 
 .card {
+  
   padding: 1rem;
   width: 350px;
   height: 450px;
@@ -159,7 +162,9 @@ img {
 }
 
 @@media screen and (max-width: 800px) {
+   
   .container {
+      display: grid
     padding: 2rem 0;
     width: 100%;
     flex-direction: column;

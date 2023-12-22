@@ -1,4 +1,5 @@
 ﻿using BL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ML;
@@ -38,6 +39,7 @@ namespace PL.Controllers
             return View(producto);
         }
 
+        [Authorize(Roles = "Administrador, Usuario")]
         public IActionResult Carrito(int? idProducto)
         {
             ML.Result result = new ML.Result();

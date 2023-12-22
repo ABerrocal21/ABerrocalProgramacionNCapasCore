@@ -23,21 +23,24 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <label for="id" class="mb-1"><i class="visually-hidden"></i>Id Producto:</label>
-                <input type="text" id="idProducto" name="idProducto" value="@Model.IdProducto" class="form-control" hidden/>
+                <input type="text" id="idProducto" name="idProducto" value="@Model.IdProducto" class="form-control " hidden/>
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-md-4">
                 <label for="nombre" class="mb-1"><i class=""></i>Nombre:</label>
-                <input type="text" id="nombre" name="nombre" value="@Model.Nombre" class="form-control" />
+                <input type="text" id="nombre" name="nombre" value="@Model.Nombre" class="form-control" onblur="Empty('lblNombre')" />
+                <label id="lblNombre"></label>
             </div>
             <div class="col-md-4">
                 <label for="nombre" class="mb-1"><i class=""></i>Precio Unitario:</label>
-                <input type="text" id="precioUnitario" name="precioUnitario" value="@Model.PrecioUnitario" class="form-control" />
+                <input type="text" id="precioUnitario" name="precioUnitario" value="@Model.PrecioUnitario" class="form-control" onkeypress="return SoloNumeros(event, 'lblPrecio')" />
+                <label id="lblPrecio"></label>
             </div>
             <div class="col-md-4">
                 <label for="nombre" class="mb-1"><i class=""></i>Stock:</label>
-                <input type="text" id="stock" name="stock" value="@Model.Stock" class="form-control" />
+                <input type="text" id="stock" name="stock" value="@Model.Stock" class="form-control" onkeypress="return SoloNumeros(event, 'lblStock')" />
+                <label id="lblStock"></label>
             </div>
         </div>
         <div class="row mb-3">
@@ -205,5 +208,53 @@
             });
         });
     });
+
+    function SoloNumeros(event, controlId) {
+
+        var numero = event.key;
+        var reGex = /^[0-9]+$/;
+
+        if (reGex.test(numero)) {
+            $('#' + controlId).text("")
+            return true
+        }
+        else {
+            $('#' + controlId).text("Solo se permiten numeros")
+            $('#' + controlId).css({ "color": "red" });
+            return false
+        }
+
+    }
+
+    function SoloLetras(controlId) {
+        var reGex = /^[a-zA-Z ]+$/;
+
+        if (reGex.test(letra)) {
+            $('#' + controlId).text("")
+            return true
+        }
+        else {
+            $('#' + controlId).text("Solo se permiten letras")
+            $('#' + controlId).css({ "color": "red" });
+
+            return false
+        }
+    }
+
+    function Empty(controlId) {
+        var letra = event.key;
+
+        if (!this.value) {
+            $('#' + controlId).text("Se necesita llenar este campo")
+            $('#' + controlId).css({ "color": "red" });
+            return true
+        }
+        else {
+            $('#' + controlId).text("")
+
+            return false
+        }
+    }
+
 
 </script>
